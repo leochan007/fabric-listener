@@ -21,7 +21,7 @@ import (
 	"fmt"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/hyperledger/fabric/core/util"
+	"github.com/leochan007/fabric-listener/core/util"
 )
 
 // Bytes returns this transaction as an array of bytes.
