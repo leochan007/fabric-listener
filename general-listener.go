@@ -137,7 +137,10 @@ func main() {
 
 	if err != nil {
 		fmt.Println("1: ", *err)
-		os.Exit(1)
+	}
+
+	if socket != nil {
+		defer socket.Close()
 	}
 
 	go systemEventHandler()

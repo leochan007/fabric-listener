@@ -1,10 +1,12 @@
 package zmq_wrapper
 
 import (
-	"fmt"
+	"github.com/op/go-logging"
 
 	zmq "github.com/alecthomas/gozmq"
 )
+
+var wrapperLogger = logging.MustGetLogger("zmq_wrapper")
 
 func InitZMQ(server_addr string) (*zmq.Socket, *string) {
 	context, err := zmq.NewContext()
@@ -31,7 +33,9 @@ func InitZMQ(server_addr string) (*zmq.Socket, *string) {
 }
 
 func SendMsg(s *zmq.Socket, header string, content []byte) {
-	fmt.Printf("[%v]:%v\n", header, string(content))
-	s.Send([]byte(header), zmq.SNDMORE)
-	s.Send(content, 0)
+	wrapperLogger.Debugf("[%v]:%v", header, string(content))
+	if s != nil {
+		s.Send([]byte(header), zmq.SNDMORE)
+		s.Send(content, 0)
+	}
 }

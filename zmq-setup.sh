@@ -26,13 +26,14 @@ fi
 
 sudo make install
 
-sudo sh -c 'echo "/home/libdev/zmq4" >> /etc/ld.so.conf'
+#sudo sh -c 'echo "/home/libdev/zmq4" >> /etc/ld.so.conf'
 
-sudo ldconfig
+#sudo ldconfig
 
 sudo ln -s /home/libdev/zmq4/lib/libzmq.so /usr/lib/libzmq.so
 
 export PKG_CONFIG_PATH=`pwd`/zeromq-4.1.5/src
 
-CGO_CFLAGS=-I/home/libdev/zmq4/include CGO_LDFLAGS=-L/home/libdev/zmq4/lib go get -tags zmq_4_x github.com/alecthomas/gozmq
+#CGO_CFLAGS=-I/home/libdev/zmq4/include CGO_LDFLAGS=-L/home/libdev/zmq4/lib 
+go get -tags zmq_4_x github.com/alecthomas/gozmq
 
