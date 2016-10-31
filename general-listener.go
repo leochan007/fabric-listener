@@ -27,10 +27,11 @@ import (
 	"os/signal"
 	"time"
 
-	zmq "github.com/alecthomas/gozmq"
 	"github.com/leochan007/fabric-listener/events/consumer"
 	pb "github.com/leochan007/fabric-listener/protos"
 	"github.com/op/go-logging"
+
+	"github.com/leochan007/fabric-listener/zmq_wrapper"
 )
 
 type adapter struct {
@@ -41,7 +42,7 @@ type adapter struct {
 	chaincodeID        string
 }
 
-var listenerLogger = logging.MustGetLogger("ycp_listener")
+var listenerLogger = logging.MustGetLogger("general_listener")
 
 //GetInterestedEvents implements consumer.EventAdapter interface for registering interested events
 func (a *adapter) GetInterestedEvents() ([]*pb.Interest, error) {
@@ -115,13 +116,6 @@ const (
 	cEvent_filter   = "cEvent"
 )
 
-func sendMsg(s *zmq.Socket, header string, content []byte) {
-	fmt.Printf("[%v]:%v\n", header, string(content))
-	//listenerLogger.Debugf("sendMsg [%v]:%v", header, string(content))
-	s.Send([]byte(header), zmq.SNDMORE)
-	s.Send(content, 0)
-}
-
 func main() {
 	var eventAddress string
 	var listenToRejections bool
@@ -139,12 +133,10 @@ func main() {
 	fmt.Printf("zmq-server-addr: %s\n", server_addr)
 	fmt.Printf("chaincodeID: %s\n", chaincodeID)
 
-	context, _ := zmq.NewContext()
-	socket, _ := context.NewSocket(zmq.PUB)
-	err := socket.Bind(server_addr)
+	socket, err := zmq_wrapper.InitZMQ(server_addr)
 
 	if err != nil {
-		fmt.Println("1: ", err.Error())
+		fmt.Println("1: ", *err)
 		os.Exit(1)
 	}
 
@@ -160,9 +152,9 @@ func main() {
 		select {
 		case <-a.notfy:
 		case r := <-a.rejected:
-			sendMsg(socket, rejected_filter, []byte(r.Rejection.ErrorMsg))
+			zmq_wrapper.SendMsg(socket, rejected_filter, []byte(r.Rejection.ErrorMsg))
 		case ce := <-a.cEvent:
-			sendMsg(socket, cEvent_filter, ce.ChaincodeEvent.Payload)
+			zmq_wrapper.SendMsg(socket, cEvent_filter, ce.ChaincodeEvent.Payload)
 		default:
 			if break_out {
 				fmt.Printf("Safely Exit\n")
