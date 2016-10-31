@@ -25,7 +25,7 @@ import (
 	"golang.org/x/net/context"
 	"google.golang.org/grpc"
 
-	"github.com/leochan007/fabric-listener/comm"
+	"github.com/leochan007/fabric-listener/core/comm"
 	ehpb "github.com/leochan007/fabric-listener/protos"
 )
 
