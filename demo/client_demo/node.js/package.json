@@ -1,0 +1,21 @@
+{
+    "name": "node_client_demo",
+    "version": "0.1.0",
+    "description": "demo package",
+    "author": "chenyifei@peersafe.cn",
+    "dependencies": {
+        "zmq": "x.x.x"
+    },
+    "devDependencies": {
+    },
+    "main": "index",
+    "bin": {
+        "test": "./bin/test.js"
+    },
+    "scripts": {
+        "start": "LD_LIBRARY_PATH=/home/libdev/zmq4/lib node demo_node_client.js"
+    },
+    "engines": {
+        "node": "4.4.3"
+    }
+}
