@@ -4,7 +4,7 @@
     "description": "demo package",
     "author": "chenyifei@peersafe.cn",
     "dependencies": {
-        "zmq": "x.x.x"
+        "zmq": "~2.15.3"
     },
     "devDependencies": {
     },
